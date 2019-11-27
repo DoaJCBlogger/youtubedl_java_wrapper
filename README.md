@@ -11,7 +11,7 @@ I recommend running this in NetBeans so you can easily copy-paste the output fro
 
 Right now the program is not designed to handle individual videos. To scrape a channel or playlist, paste its URL into the URL field and click Start.
 
-Once it's done, you have a choice. You can open a windows and copy-paste commands into it one at a time, or you can copy-paste the commands into a batch file. If you choose to use batch files, you'll need to use Find/Replace in a text editor to replace .%( with .%%( or it will fail.
+Once it's done, you have a choice. You can open a window and copy-paste commands into it one at a time, or you can copy-paste the commands into a batch file. If you choose to use batch files, you'll need to use Find/Replace in a text editor to replace .%( with .%%( or it will fail.
 
 I like to have multiple command windows, each running a subset of the commands, which creates a multi-threaded download process. To do that, copy-paste the commands into Notepad++ and split them into a few batch files in the folders you want the videos to end up in.
 

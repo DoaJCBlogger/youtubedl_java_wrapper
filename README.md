@@ -1,7 +1,7 @@
 # youtubedl_java_wrapper
 A YouTube scraping assistant that chooses the best format for each video on an individual basis. "Best format" means the smallest file at the highest resolution. VP9 is often smaller than MP4, but not always. You can also set a maximum resolution, in case a channel or playlist looks best at (for example) 480p but offers up to 1080p.
 
-![Screenshot](https://preview.redd.it/qxxqqa7sk5141.png?width=475&format=png&auto=webp&s=0f0efb536a29afc2b6e4404b62e7f132a361690d)
+![Screenshot](docs/screenshot.png)
 
 #### How to use
 

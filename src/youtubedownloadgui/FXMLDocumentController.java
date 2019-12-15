@@ -8,14 +8,20 @@ package youtubedownloadgui;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.Vector;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleGroup;
 
 /**
  *
@@ -45,12 +51,24 @@ public class FXMLDocumentController implements Initializable {
     private CheckBox forceMP4CB;
     @FXML
     private CheckBox preserveAsianCharsCB;
+    @FXML
+    private CheckBox getVideosCB;
+    @FXML
+    private CheckBox getMetadataCB;
+    @FXML
+    private CheckBox getCommentsCB;
+    @FXML
+    private Label maxResLabel;
+    @FXML
+    private CheckBox useDoublePercentCB;
+    
+    final ToggleGroup commentRBGroup = new ToggleGroup();
     
     @FXML
     private void handleButtonAction(ActionEvent event) throws Exception {
         String url = urlField.getText();
         if (url.length() == 0) {
-            titleLabel.setText("No URL");
+            recommendedFormatLabel.setText("No URL");
             return;
         }
         
@@ -62,6 +80,16 @@ public class FXMLDocumentController implements Initializable {
         boolean rejectAV1 = rejectAV1CB.isSelected();
         boolean forceMP4 = forceMP4CB.isSelected();
         boolean preserveAsianTitles = preserveAsianCharsCB.isSelected();
+        boolean getVideos = getVideosCB.isSelected();
+        boolean getMetadata = getMetadataCB.isSelected();
+        boolean getComments = getCommentsCB.isSelected();
+        boolean useDoublePercent = useDoublePercentCB.isSelected();
+        boolean waitToPrintCommentCommands = (getVideos || getMetadata);
+        
+        if (!getVideos && !getMetadata && !getComments) {
+            recommendedFormatLabel.setText("Nothing to download (videos, metadata, and comments are unchecked)");
+            return;
+        }
         
         recommendedFormatLabel.setText("Getting videos...");
         Runtime rt = Runtime.getRuntime();
@@ -69,15 +97,43 @@ public class FXMLDocumentController implements Initializable {
         Process p = rt.exec(cmd);
         
         BufferedReader stdin = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        
+        ArrayList<String> commentCommands = new ArrayList<>();
+        
         String s;
         while ((s = stdin.readLine()) != null){
             if (s != null && s.length() == 11) {
-                //No resolution limit, allow 60fps, reject AV1
-                System.out.println("youtube-dl.exe"+(getThumbnail ?  " --write-thumbnail" : "")+(getDesc ?  " --write-description" : "")+(getInfoJSON ?  " --write-info-json" : "")+" -f " + getBestVideoAndAudioFormat("https://youtube.com/watch?v="+s, maxHRes, reject60fps, rejectAV1) + " -w -o \""+(preserveAsianTitles ? "%(title)s" : getWindowsSafeTitle("https://youtube.com/watch?v="+s))+".%(ext)s"+"\" "+"https://youtube.com/watch?v="+s);
+                if (!getVideos && !getMetadata) {
+                    //Do nothing
+                } else if (!getVideos && getMetadata) {
+                    //Just get the metadata
+                    System.out.println("youtube-dl.exe"+(getThumbnail ?  " --write-thumbnail" : "")+(getDesc ?  " --write-description" : "")+(getInfoJSON ?  " --write-info-json" : "")+" --skip-download -w -o \""+(preserveAsianTitles ? "%"+(useDoublePercent ? "%" : "")+"(title)s" : getWindowsSafeTitle("https://youtube.com/watch?v="+s))+".%"+(useDoublePercent ? "%" : "")+"(ext)s"+"\" "+"https://youtube.com/watch?v="+s);
+                } else if (getVideos && !getMetadata) {
+                    //Just get the videos
+                    System.out.println("youtube-dl.exe -f " + getBestVideoAndAudioFormat("https://youtube.com/watch?v="+s, maxHRes, reject60fps, rejectAV1) + " -w -o \""+(preserveAsianTitles ? "%"+(useDoublePercent ? "%" : "")+"(title)s" : getWindowsSafeTitle("https://youtube.com/watch?v="+s))+".%"+(useDoublePercent ? "%" : "")+"(ext)s"+"\" "+"https://youtube.com/watch?v="+s);
+                } else if (getVideos && getMetadata) {
+                    //Get the videos and metadata
+                    System.out.println("youtube-dl.exe"+(getThumbnail ?  " --write-thumbnail" : "")+(getDesc ?  " --write-description" : "")+(getInfoJSON ?  " --write-info-json" : "")+" -f " + getBestVideoAndAudioFormat("https://youtube.com/watch?v="+s, maxHRes, reject60fps, rejectAV1) + " -w -o \""+(preserveAsianTitles ? "%"+(useDoublePercent ? "%" : "")+"(title)s" : getWindowsSafeTitle("https://youtube.com/watch?v="+s))+".%"+(useDoublePercent ? "%" : "")+"(ext)s"+"\" "+"https://youtube.com/watch?v="+s);
+                }
+                
+                if (getComments) {
+                    if (waitToPrintCommentCommands) {
+                        commentCommands.add("call youtube-comment-scraper -f json -o \""+getWindowsSafeTitle("https://youtube.com/watch?v="+s)+"("+s+").json\" -- " + s);
+                    } else {
+                        System.out.println("call youtube-comment-scraper -f json -o \""+getWindowsSafeTitle("https://youtube.com/watch?v="+s)+"("+s+").json\" -- " + s);
+                    }
+                }
             }
         }
         //Wait for youtube-dl to end
         while (p.isAlive()) {}
+        
+        if (getComments && waitToPrintCommentCommands) {
+            System.out.println();
+            for (String c : commentCommands) {
+                System.out.println(c);
+            }
+        }
         
         recommendedFormatLabel.setText("Done");
     }
@@ -284,6 +340,53 @@ public class FXMLDocumentController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        
+        //Copied from https://stackoverflow.com/a/13729491
+        //Answer by "Uluk Biy"
+        getCommentsCB.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                
+            }
+        });
+        
+        //Copied from https://stackoverflow.com/a/26527350
+        //Answer by "James_D"
+        getVideosCB.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> obs, Boolean wasPreviouslySelected, Boolean isNowSelected) {
+                if (isNowSelected) { 
+                    //Enable everything related to downloading videos
+                    reject60fpsCB.setDisable(false);
+                    rejectAV1CB.setDisable(false);
+                    maxResField.setDisable(false);
+                    forceMP4CB.setDisable(false);
+                    maxResLabel.setDisable(false);
+                } else {
+                    //Disable everything
+                    reject60fpsCB.setDisable(true);
+                    rejectAV1CB.setDisable(true);
+                    maxResField.setDisable(true);
+                    forceMP4CB.setDisable(true);
+                    maxResLabel.setDisable(true);
+                }
+            }
+        });
+        getMetadataCB.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> obs, Boolean wasPreviouslySelected, Boolean isNowSelected) {
+                if (isNowSelected) { 
+                    //Enable everything related to downloading videos
+                    getThumbCB.setDisable(false);
+                    getDescCB.setDisable(false);
+                    getInfoJSONCB.setDisable(false);
+                } else {
+                    //Disable everything
+                    getThumbCB.setDisable(true);
+                    getDescCB.setDisable(true);
+                    getInfoJSONCB.setDisable(true);
+                }
+            }
+        });
     }
 }

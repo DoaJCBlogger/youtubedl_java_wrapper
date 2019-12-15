@@ -13,20 +13,24 @@
       <TextField id="urlField" fx:id="urlField" layoutX="14.0" layoutY="48.0" prefHeight="25.0" prefWidth="348.0" />
       <Label id="recommendedFormatLabel" fx:id="recommendedFormatLabel" layoutX="11.0" layoutY="112.0" text="Recommended format pair: %pair%" />
       <Label id="titleLabel" fx:id="titleLabel" layoutX="11.0" layoutY="95.0" prefHeight="17.0" prefWidth="426.0" text="\%title%" />
-      <CheckBox fx:id="getThumbCB" layoutX="11.0" layoutY="148.0" mnemonicParsing="false" selected="true" text="Get thumbnail" />
-      <CheckBox fx:id="getDescCB" layoutX="11.0" layoutY="176.0" mnemonicParsing="false" selected="true" text="Get description" />
-      <CheckBox fx:id="getInfoJSONCB" layoutX="11.0" layoutY="204.0" mnemonicParsing="false" selected="true" text="Get info JSON" />
-      <TableView layoutX="13.0" layoutY="238.0" prefHeight="273.0" prefWidth="426.0">
+      <CheckBox fx:id="getThumbCB" layoutX="11.0" layoutY="194.0" mnemonicParsing="false" selected="true" text="Get thumbnail" />
+      <CheckBox fx:id="getDescCB" layoutX="11.0" layoutY="222.0" mnemonicParsing="false" selected="true" text="Get description" />
+      <CheckBox fx:id="getInfoJSONCB" layoutX="11.0" layoutY="250.0" mnemonicParsing="false" selected="true" text="Get info JSON" />
+      <TableView layoutX="13.0" layoutY="321.0" prefHeight="190.0" prefWidth="426.0">
         <columns>
           <TableColumn prefWidth="78.0" text="Best Format" />
           <TableColumn prefWidth="334.0" text="Title" />
         </columns>
       </TableView>
-      <Label layoutX="156.0" layoutY="148.0" text="Max res. (1080, 720, etc)" />
-      <TextField fx:id="maxResField" layoutX="301.0" layoutY="144.0" prefHeight="25.0" prefWidth="69.0" promptText="unlimited" />
-      <CheckBox fx:id="reject60fpsCB" layoutX="156.0" layoutY="176.0" mnemonicParsing="false" selected="true" text="Reject 60 fps" />
-      <CheckBox fx:id="rejectAV1CB" layoutX="156.0" layoutY="204.0" mnemonicParsing="false" selected="true" text="Reject AV1" />
-      <CheckBox fx:id="forceMP4CB" layoutX="299.0" layoutY="176.0" mnemonicParsing="false" text="Force MP4" />
-      <CheckBox fx:id="preserveAsianCharsCB" layoutX="299.0" layoutY="204.0" mnemonicParsing="false" text="Preserve Asian titles" />
+      <Label fx:id="maxResLabel" layoutX="156.0" layoutY="194.0" text="Max res. (1080, 720, etc)" />
+      <TextField fx:id="maxResField" layoutX="301.0" layoutY="190.0" prefHeight="25.0" prefWidth="69.0" promptText="unlimited" />
+      <CheckBox fx:id="reject60fpsCB" layoutX="156.0" layoutY="222.0" mnemonicParsing="false" selected="true" text="Reject 60 fps" />
+      <CheckBox fx:id="rejectAV1CB" layoutX="156.0" layoutY="250.0" mnemonicParsing="false" selected="true" text="Reject AV1" />
+      <CheckBox fx:id="forceMP4CB" layoutX="299.0" layoutY="222.0" mnemonicParsing="false" text="Force MP4" />
+      <CheckBox fx:id="preserveAsianCharsCB" layoutX="299.0" layoutY="250.0" mnemonicParsing="false" text="Preserve Asian titles" />
+      <CheckBox fx:id="getVideosCB" layoutX="11.0" layoutY="147.0" mnemonicParsing="false" selected="true" text="Videos" />
+      <CheckBox fx:id="getMetadataCB" layoutX="80.0" layoutY="147.0" mnemonicParsing="false" selected="true" text="Metadata" />
+      <CheckBox fx:id="getCommentsCB" layoutX="161.0" layoutY="147.0" mnemonicParsing="false" text="Comments (requires youtube-comment-scraper)" />
+      <CheckBox fx:id="useDoublePercentCB" layoutX="11.0" layoutY="278.0" mnemonicParsing="false" selected="true" text="Use double % (for Windows batch file output)" />
     </children>
 </AnchorPane>

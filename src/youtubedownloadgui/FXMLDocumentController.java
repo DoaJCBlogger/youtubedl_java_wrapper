@@ -153,7 +153,7 @@ public class FXMLDocumentController implements Initializable {
         while (p.isAlive()) {}
         
         //If s is empty, return "no_title"
-        if (s.isEmpty()) return "no_title";
+        if (s == null) return "no_title";
         
         //Regex found at https://stackoverflow.com/questions/31563951/removing-invalid-characters-from-a-string-to-use-it-as-a-file
         String outStr = "";

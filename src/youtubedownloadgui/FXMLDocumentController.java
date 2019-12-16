@@ -145,12 +145,16 @@ public class FXMLDocumentController implements Initializable {
         Process p = rt.exec(cmd);
         
         BufferedReader stdin = new BufferedReader(new InputStreamReader(p.getInputStream()));
-        String s;
+        String s = "";
         while ((s = stdin.readLine()) != null){
             if (s.length() > 0) break;
         }
         //Wait for youtube-dl to end
         while (p.isAlive()) {}
+        
+        //If s is empty, return "no_title"
+        if (s.isEmpty()) return "no_title";
+        
         //Regex found at https://stackoverflow.com/questions/31563951/removing-invalid-characters-from-a-string-to-use-it-as-a-file
         String outStr = "";
         for (int i = 0; i < s.length(); i++) {

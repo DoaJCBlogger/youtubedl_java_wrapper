@@ -32,5 +32,6 @@
       <CheckBox fx:id="getMetadataCB" layoutX="80.0" layoutY="147.0" mnemonicParsing="false" selected="true" text="Metadata" />
       <CheckBox fx:id="getCommentsCB" layoutX="161.0" layoutY="147.0" mnemonicParsing="false" text="Comments (requires youtube-comment-scraper)" />
       <CheckBox fx:id="useDoublePercentCB" layoutX="11.0" layoutY="278.0" mnemonicParsing="false" selected="true" text="Use double % (for Windows batch file output)" />
+      <CheckBox fx:id="addIDToFilenameCB" layoutX="299.0" layoutY="278.0" mnemonicParsing="false" text="Add ID to filename" />
     </children>
 </AnchorPane>

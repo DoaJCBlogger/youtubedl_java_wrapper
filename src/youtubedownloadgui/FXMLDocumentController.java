@@ -61,8 +61,8 @@ public class FXMLDocumentController implements Initializable {
     private Label maxResLabel;
     @FXML
     private CheckBox useDoublePercentCB;
-    
-    final ToggleGroup commentRBGroup = new ToggleGroup();
+    @FXML
+    private CheckBox addIDToFilenameCB;
     
     @FXML
     private void handleButtonAction(ActionEvent event) throws Exception {
@@ -85,6 +85,7 @@ public class FXMLDocumentController implements Initializable {
         boolean getComments = getCommentsCB.isSelected();
         boolean useDoublePercent = useDoublePercentCB.isSelected();
         boolean waitToPrintCommentCommands = (getVideos || getMetadata);
+        boolean addIDToFilename = addIDToFilenameCB.isSelected();
         
         if (!getVideos && !getMetadata && !getComments) {
             recommendedFormatLabel.setText("Nothing to download (videos, metadata, and comments are unchecked)");
@@ -107,20 +108,20 @@ public class FXMLDocumentController implements Initializable {
                     //Do nothing
                 } else if (!getVideos && getMetadata) {
                     //Just get the metadata
-                    System.out.println("youtube-dl.exe"+(getThumbnail ?  " --write-thumbnail" : "")+(getDesc ?  " --write-description" : "")+(getInfoJSON ?  " --write-info-json" : "")+" --skip-download -w -o \""+(preserveAsianTitles ? "%"+(useDoublePercent ? "%" : "")+"(title)s" : getWindowsSafeTitle("https://youtube.com/watch?v="+s))+".%"+(useDoublePercent ? "%" : "")+"(ext)s"+"\" "+"https://youtube.com/watch?v="+s);
+                    System.out.println("youtube-dl.exe"+(getThumbnail ?  " --write-thumbnail" : "")+(getDesc ?  " --write-description" : "")+(getInfoJSON ?  " --write-info-json" : "")+" --skip-download -w -o \""+(preserveAsianTitles ? "%"+(useDoublePercent ? "%" : "")+"(title)s" : getWindowsSafeTitle("https://youtube.com/watch?v="+s))+ (addIDToFilename ? "("+(useDoublePercent ? "%" : "")+"%(id)s)" : "") + ".%"+(useDoublePercent ? "%" : "")+"(ext)s"+"\" "+"https://youtube.com/watch?v="+s);
                 } else if (getVideos && !getMetadata) {
                     //Just get the videos
-                    System.out.println("youtube-dl.exe -f " + getBestVideoAndAudioFormat("https://youtube.com/watch?v="+s, maxHRes, reject60fps, rejectAV1) + " -w -o \""+(preserveAsianTitles ? "%"+(useDoublePercent ? "%" : "")+"(title)s" : getWindowsSafeTitle("https://youtube.com/watch?v="+s))+".%"+(useDoublePercent ? "%" : "")+"(ext)s"+"\" "+"https://youtube.com/watch?v="+s);
+                    System.out.println("youtube-dl.exe -f " + getBestVideoAndAudioFormat("https://youtube.com/watch?v="+s, maxHRes, reject60fps, rejectAV1) + " -w -o \""+(preserveAsianTitles ? "%"+(useDoublePercent ? "%" : "")+"(title)s" : getWindowsSafeTitle("https://youtube.com/watch?v="+s))+ (addIDToFilename ? "("+(useDoublePercent ? "%" : "")+"%(id)s)" : "") + ".%"+(useDoublePercent ? "%" : "")+"(ext)s"+"\" "+"https://youtube.com/watch?v="+s);
                 } else if (getVideos && getMetadata) {
                     //Get the videos and metadata
-                    System.out.println("youtube-dl.exe"+(getThumbnail ?  " --write-thumbnail" : "")+(getDesc ?  " --write-description" : "")+(getInfoJSON ?  " --write-info-json" : "")+" -f " + getBestVideoAndAudioFormat("https://youtube.com/watch?v="+s, maxHRes, reject60fps, rejectAV1) + " -w -o \""+(preserveAsianTitles ? "%"+(useDoublePercent ? "%" : "")+"(title)s" : getWindowsSafeTitle("https://youtube.com/watch?v="+s))+".%"+(useDoublePercent ? "%" : "")+"(ext)s"+"\" "+"https://youtube.com/watch?v="+s);
+                    System.out.println("youtube-dl.exe"+(getThumbnail ?  " --write-thumbnail" : "")+(getDesc ?  " --write-description" : "")+(getInfoJSON ?  " --write-info-json" : "")+" -f " + getBestVideoAndAudioFormat("https://youtube.com/watch?v="+s, maxHRes, reject60fps, rejectAV1) + " -w -o \""+(preserveAsianTitles ? "%"+(useDoublePercent ? "%" : "")+"(title)s" : getWindowsSafeTitle("https://youtube.com/watch?v="+s))+ (addIDToFilename ? "("+(useDoublePercent ? "%" : "")+"%(id)s)" : "") + ".%"+(useDoublePercent ? "%" : "")+"(ext)s"+"\" "+"https://youtube.com/watch?v="+s);
                 }
                 
                 if (getComments) {
                     if (waitToPrintCommentCommands) {
-                        commentCommands.add("call youtube-comment-scraper -f json -o \""+getWindowsSafeTitle("https://youtube.com/watch?v="+s)+"("+s+").json\" -- " + s);
+                        commentCommands.add("call youtube-comment-scraper -f json -o \""+getWindowsSafeTitle("https://youtube.com/watch?v="+s)+(addIDToFilename ? "(" + s + ")" : "")+".json\" -- " + s);
                     } else {
-                        System.out.println("call youtube-comment-scraper -f json -o \""+getWindowsSafeTitle("https://youtube.com/watch?v="+s)+"("+s+").json\" -- " + s);
+                        System.out.println("call youtube-comment-scraper -f json -o \""+getWindowsSafeTitle("https://youtube.com/watch?v="+s)+(addIDToFilename ? "(" + s + ")" : "")+".json\" -- " + s);
                     }
                 }
             }

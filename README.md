@@ -11,7 +11,7 @@ If you want to scrape comments, you'll need youtube-comment-scraper-cli. This pr
 
 I recommend running this in NetBeans so you can easily copy-paste the output from its console.
 
-The program supports playlists and individual videos. To scrape a URL, paste it into the URL field and click Start.
+The program supports channels, playlists, and individual videos. To scrape a URL, paste it into the URL field and click Start.
 
 Once it's done, you have a choice. You can open a window and copy-paste commands into it one at a time, or you can copy-paste the commands into a batch file.
 

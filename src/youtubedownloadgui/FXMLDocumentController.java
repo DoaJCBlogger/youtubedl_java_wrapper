@@ -119,9 +119,9 @@ public class FXMLDocumentController implements Initializable {
                 
                 if (getComments) {
                     if (waitToPrintCommentCommands) {
-                        commentCommands.add("call youtube-comment-scraper -f json -o \""+getWindowsSafeTitle("https://youtube.com/watch?v="+s)+(addIDToFilename ? "(" + s + ")" : "")+".json\" -- " + s);
+                        commentCommands.add("call youtube-comment-scraper -f json -s -o \""+getWindowsSafeTitle("https://youtube.com/watch?v="+s)+(addIDToFilename ? "(" + s + ")" : "")+".json\" -- " + s);
                     } else {
-                        System.out.println("call youtube-comment-scraper -f json -o \""+getWindowsSafeTitle("https://youtube.com/watch?v="+s)+(addIDToFilename ? "(" + s + ")" : "")+".json\" -- " + s);
+                        System.out.println("call youtube-comment-scraper -f json -s -o \""+getWindowsSafeTitle("https://youtube.com/watch?v="+s)+(addIDToFilename ? "(" + s + ")" : "")+".json\" -- " + s);
                     }
                 }
             }

@@ -19,6 +19,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
@@ -63,9 +65,13 @@ public class FXMLDocumentController implements Initializable {
     private CheckBox useDoublePercentCB;
     @FXML
     private CheckBox addIDToFilenameCB;
+    @FXML
+    private Spinner limitSpinner;
     
     @FXML
     private void handleButtonAction(ActionEvent event) throws Exception {
+        int limit = (int)limitSpinner.getValue();
+
         String url = urlField.getText();
         if (url.length() == 0) {
             recommendedFormatLabel.setText("No URL");
@@ -102,7 +108,12 @@ public class FXMLDocumentController implements Initializable {
         ArrayList<String> commentCommands = new ArrayList<>();
         
         String s;
-        while ((s = stdin.readLine()) != null){
+        int count = 0;
+        while ((s = stdin.readLine()) != null) {
+            if ((limit > 0) && (count >= limit)) {
+                p.destroyForcibly();
+                break;
+            }
             if (s != null && s.length() == 11) {
                 if (!getVideos && !getMetadata) {
                     //Do nothing
@@ -124,6 +135,7 @@ public class FXMLDocumentController implements Initializable {
                         System.out.println("call youtube-comment-scraper -f json -s -o \""+getWindowsSafeTitle("https://youtube.com/watch?v="+s)+(addIDToFilename ? "(" + s + ")" : "")+".json\" -- " + s);
                     }
                 }
+                count++;
             }
         }
         //Wait for youtube-dl to end
@@ -345,6 +357,7 @@ public class FXMLDocumentController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        limitSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE));
         
         //Copied from https://stackoverflow.com/a/13729491
         //Answer by "Uluk Biy"

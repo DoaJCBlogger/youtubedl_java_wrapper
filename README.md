@@ -58,4 +58,4 @@ Once this is done, I usually compress the "metadata" and "comments" folders usin
 
 #### Building
 
-This project was built with NetBeans IDE 4.2.
+This project was built with NetBeans IDE 8.2.

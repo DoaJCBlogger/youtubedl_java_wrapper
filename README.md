@@ -34,6 +34,7 @@ Once this is done, I usually compress the "metadata" and "comments" folders usin
 
 #### Settings
 
+- Limit: Limits the number of videos. Since videos are scraped in reverse chronological order (most recent first), this field lets you get the most recent ones. Useful for updating an archive with new videos.
 - Videos: Get the videos
 - Metadata: Get the metadata (thumbnails, description, and info JSON)
 - Comments: Get the comments

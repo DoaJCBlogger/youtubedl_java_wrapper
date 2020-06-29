@@ -15,7 +15,7 @@ The program supports channels, playlists, and individual videos. To scrape a URL
 
 Once it's done, you have a choice. You can open a window and copy-paste commands into it one at a time, or you can copy-paste the commands into a batch file.
 
-I like to have multiple command windows, each running a subset of the commands, which creates a multi-threaded download process. To do that, copy-paste the commands into Notepad++ and split them into a few batch files in the folders you want the videos to end up in.
+I like to have multiple command windows, each running a subset of the commands, which creates a multi-threaded download process. To do that, copy-paste the commands into Notepad++ and split them into a few batch files in the folder you want the videos to end up in.
 
 Sometimes YouTube will throttle the download process to less than 100 KiB/sec. In that case, just restart the command or batch file. This program generates commands that instruct youtube-dl to resume the download process without overwriting anything.
 
@@ -27,6 +27,7 @@ mkdir metadata
 move *.description metadata
 move *.json metadata
 move *.jpg thumbnails
+move *.webp thumbnails
 ```
 I prefer to put comments in their own folder so I end up with "thumbnails", "metadata", and "comments" folders.
 

@@ -9,7 +9,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="525.0" prefWidth="449.0" xmlns="http://javafx.com/javafx/8.0.241" xmlns:fx="http://javafx.com/fxml/1" fx:controller="youtubedownloadgui.FXMLDocumentController">
+<AnchorPane id="AnchorPane" prefHeight="547.0" prefWidth="449.0" xmlns="http://javafx.com/javafx/8.0.241" xmlns:fx="http://javafx.com/fxml/1" fx:controller="youtubedownloadgui.FXMLDocumentController">
     <children>
         <Button fx:id="button" layoutX="370.0" layoutY="48.0" onAction="#handleButtonAction" prefHeight="25.0" prefWidth="69.0" text="Start" />
       <Label layoutX="14.0" layoutY="25.0" text="URL" />
@@ -19,7 +19,7 @@
       <CheckBox fx:id="getThumbCB" layoutX="11.0" layoutY="214.0" mnemonicParsing="false" selected="true" text="Get thumbnail" />
       <CheckBox fx:id="getDescCB" layoutX="11.0" layoutY="242.0" mnemonicParsing="false" selected="true" text="Get description" />
       <CheckBox fx:id="getInfoJSONCB" layoutX="11.0" layoutY="270.0" mnemonicParsing="false" selected="true" text="Get info JSON" />
-      <TableView layoutX="13.0" layoutY="345.0" prefHeight="166.0" prefWidth="426.0">
+      <TableView layoutX="13.0" layoutY="367.0" prefHeight="166.0" prefWidth="426.0">
         <columns>
           <TableColumn prefWidth="78.0" text="Best Format" />
           <TableColumn prefWidth="334.0" text="Title" />
@@ -38,5 +38,7 @@
       <CheckBox fx:id="addIDToFilenameCB" layoutX="299.0" layoutY="298.0" mnemonicParsing="false" text="Add ID to filename" />
       <Spinner fx:id="limitSpinner" layoutX="133.0" layoutY="82.0" prefHeight="25.0" prefWidth="79.0" />
       <Label layoutX="11.0" layoutY="86.0" text="Limit (0 is unlimited)" />
+      <CheckBox fx:id="useArchiveFileCB" layoutX="11.0" layoutY="326.0" mnemonicParsing="false" selected="true" text="Use archive file" />
+      <TextField fx:id="archiveFileField" layoutX="156.0" layoutY="322.0" prefHeight="25.0" prefWidth="128.0" promptText="archive.txt" />
     </children>
 </AnchorPane>

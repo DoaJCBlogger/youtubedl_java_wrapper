@@ -67,6 +67,10 @@ public class FXMLDocumentController implements Initializable {
     private CheckBox addIDToFilenameCB;
     @FXML
     private Spinner limitSpinner;
+    @FXML
+    private CheckBox useArchiveFileCB;
+    @FXML
+    private TextField archiveFileField;
     
     @FXML
     private void handleButtonAction(ActionEvent event) throws Exception {
@@ -92,6 +96,11 @@ public class FXMLDocumentController implements Initializable {
         boolean useDoublePercent = useDoublePercentCB.isSelected();
         boolean waitToPrintCommentCommands = (getVideos || getMetadata);
         boolean addIDToFilename = addIDToFilenameCB.isSelected();
+        boolean useArchiveFile = useArchiveFileCB.isSelected();
+        String archiveFile = "archive.txt";
+        if (useArchiveFile && !archiveFileField.getText().isEmpty()) {
+            archiveFile = archiveFileField.getText();
+        }
         
         if (!getVideos && !getMetadata && !getComments) {
             recommendedFormatLabel.setText("Nothing to download (videos, metadata, and comments are unchecked)");
@@ -119,13 +128,13 @@ public class FXMLDocumentController implements Initializable {
                     //Do nothing
                 } else if (!getVideos && getMetadata) {
                     //Just get the metadata
-                    System.out.println("youtube-dl.exe"+(getThumbnail ?  " --write-thumbnail" : "")+(getDesc ?  " --write-description" : "")+(getInfoJSON ?  " --write-info-json" : "")+" --skip-download -w -o \""+(preserveAsianTitles ? "%"+(useDoublePercent ? "%" : "")+"(title)s" : getWindowsSafeTitle("https://youtube.com/watch?v="+s))+ (addIDToFilename ? "("+(useDoublePercent ? "%" : "")+"%(id)s)" : "") + ".%"+(useDoublePercent ? "%" : "")+"(ext)s"+"\" "+"https://youtube.com/watch?v="+s);
+                    System.out.println("youtube-dl.exe"+(getThumbnail ?  " --write-thumbnail" : "")+(getDesc ?  " --write-description" : "")+(getInfoJSON ?  " --write-info-json" : "")+" --skip-download -w"+(useArchiveFile ? " --archive-file \"" + archiveFile + "\"" : "")+" -o \""+(preserveAsianTitles ? "%"+(useDoublePercent ? "%" : "")+"(title)s" : getWindowsSafeTitle("https://youtube.com/watch?v="+s))+ (addIDToFilename ? "("+(useDoublePercent ? "%" : "")+"%(id)s)" : "") + ".%"+(useDoublePercent ? "%" : "")+"(ext)s"+"\" "+"https://youtube.com/watch?v="+s);
                 } else if (getVideos && !getMetadata) {
                     //Just get the videos
-                    System.out.println("youtube-dl.exe -f " + getBestVideoAndAudioFormat("https://youtube.com/watch?v="+s, maxHRes, reject60fps, rejectAV1) + " -w -o \""+(preserveAsianTitles ? "%"+(useDoublePercent ? "%" : "")+"(title)s" : getWindowsSafeTitle("https://youtube.com/watch?v="+s))+ (addIDToFilename ? "("+(useDoublePercent ? "%" : "")+"%(id)s)" : "") + ".%"+(useDoublePercent ? "%" : "")+"(ext)s"+"\" "+"https://youtube.com/watch?v="+s);
+                    System.out.println("youtube-dl.exe -f " + getBestVideoAndAudioFormat("https://youtube.com/watch?v="+s, maxHRes, reject60fps, rejectAV1) + " -w"+(useArchiveFile ? " --archive-file \"" + archiveFile + "\"" : "")+" -o \""+(preserveAsianTitles ? "%"+(useDoublePercent ? "%" : "")+"(title)s" : getWindowsSafeTitle("https://youtube.com/watch?v="+s))+ (addIDToFilename ? "("+(useDoublePercent ? "%" : "")+"%(id)s)" : "") + ".%"+(useDoublePercent ? "%" : "")+"(ext)s"+"\" "+"https://youtube.com/watch?v="+s);
                 } else if (getVideos && getMetadata) {
                     //Get the videos and metadata
-                    System.out.println("youtube-dl.exe"+(getThumbnail ?  " --write-thumbnail" : "")+(getDesc ?  " --write-description" : "")+(getInfoJSON ?  " --write-info-json" : "")+" -f " + getBestVideoAndAudioFormat("https://youtube.com/watch?v="+s, maxHRes, reject60fps, rejectAV1) + " -w -o \""+(preserveAsianTitles ? "%"+(useDoublePercent ? "%" : "")+"(title)s" : getWindowsSafeTitle("https://youtube.com/watch?v="+s))+ (addIDToFilename ? "("+(useDoublePercent ? "%" : "")+"%(id)s)" : "") + ".%"+(useDoublePercent ? "%" : "")+"(ext)s"+"\" "+"https://youtube.com/watch?v="+s);
+                    System.out.println("youtube-dl.exe"+(getThumbnail ?  " --write-thumbnail" : "")+(getDesc ?  " --write-description" : "")+(getInfoJSON ?  " --write-info-json" : "")+" -f " + getBestVideoAndAudioFormat("https://youtube.com/watch?v="+s, maxHRes, reject60fps, rejectAV1) + " -w"+(useArchiveFile ? " --archive-file \"" + archiveFile + "\"" : "")+" -o \""+(preserveAsianTitles ? "%"+(useDoublePercent ? "%" : "")+"(title)s" : getWindowsSafeTitle("https://youtube.com/watch?v="+s))+ (addIDToFilename ? "("+(useDoublePercent ? "%" : "")+"%(id)s)" : "") + ".%"+(useDoublePercent ? "%" : "")+"(ext)s"+"\" "+"https://youtube.com/watch?v="+s);
                 }
                 
                 if (getComments) {
@@ -373,7 +382,7 @@ public class FXMLDocumentController implements Initializable {
         getVideosCB.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> obs, Boolean wasPreviouslySelected, Boolean isNowSelected) {
-                if (isNowSelected) { 
+                if (isNowSelected) {
                     //Enable everything related to downloading videos
                     reject60fpsCB.setDisable(false);
                     rejectAV1CB.setDisable(false);
@@ -393,7 +402,7 @@ public class FXMLDocumentController implements Initializable {
         getMetadataCB.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> obs, Boolean wasPreviouslySelected, Boolean isNowSelected) {
-                if (isNowSelected) { 
+                if (isNowSelected) {
                     //Enable everything related to downloading videos
                     getThumbCB.setDisable(false);
                     getDescCB.setDisable(false);
@@ -403,6 +412,18 @@ public class FXMLDocumentController implements Initializable {
                     getThumbCB.setDisable(true);
                     getDescCB.setDisable(true);
                     getInfoJSONCB.setDisable(true);
+                }
+            }
+        });
+        useArchiveFileCB.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> obs, Boolean wasPreviouslySelected, Boolean isNowSelected) {
+                if (isNowSelected) {
+                    //Enable the archive filename field
+                    archiveFileField.setDisable(false);
+                } else {
+                    //Disable the archive filename field
+                    archiveFileField.setDisable(true);
                 }
             }
         });

@@ -49,6 +49,7 @@ Once this is done, I usually compress the "metadata" and "comments" folders usin
 - Preserve Asian titles: I added this when I had to scrape a Korean channel and the filenames were being destroyed. With the box unchecked, the program converts the titles to filenames safe for Windows using a method similar to what 4K Video Downloader uses. With this box checked, it will allow youtube-dl to convert the titles to filenames, preserving Asian characters.
 - Use double %: Windows batch files require %% instead of %.
 - Add video ID to filename: Adds the video ID, in parentheses, to the end of each filename just before the file extension. Applies to video, thumbnail, description, info JSON, and comments JSON. This setting is recommended if "Preserve Asian titles" is unchecked because in some rare cases a video can be saved as "no_title.\[ext\]". Since overwriting is disabled, if more than one video has this problem then others with the issue will be skipped. Using "Preserve Asian titles" prevents this by forcing youtube-dl to name the file automatically.
+- Use archive file: Uses youtube-dl's --archive-file agrument to save a list of videos ID's to avoid re-downloading. Useful if you want to update an archive later using only youtube-dl.
 
 #### Known Issues
 

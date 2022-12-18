@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.util.Vector;
 import javafx.beans.value.ChangeListener;
@@ -109,7 +110,7 @@ public class FXMLDocumentController implements Initializable {
         
         recommendedFormatLabel.setText("Getting videos...");
         Runtime rt = Runtime.getRuntime();
-        String[] cmd = {"youtube-dl.exe","--get-id","--ignore-errors"/*,"--proxy","http://149.56.106.104:3128"*/,url};
+        String[] cmd = {"yt-dlp.exe","--get-id","--ignore-errors"/*,"--proxy","http://149.56.106.104:3128"*/,url};
         Process p = rt.exec(cmd);
         
         BufferedReader stdin = new BufferedReader(new InputStreamReader(p.getInputStream()));
@@ -128,41 +129,44 @@ public class FXMLDocumentController implements Initializable {
                     //Do nothing
                 } else if (!getVideos && getMetadata) {
                     //Just get the metadata
-                    System.out.println("youtube-dl.exe"+(getThumbnail ?  " --write-thumbnail" : "")+(getDesc ?  " --write-description" : "")+(getInfoJSON ?  " --write-info-json" : "")+" --skip-download -w"+(useArchiveFile ? " --download-archive \"" + archiveFile + "\"" : "")+" -o \""+(preserveAsianTitles ? "%"+(useDoublePercent ? "%" : "")+"(title)s" : getWindowsSafeTitle("https://youtube.com/watch?v="+s))+ (addIDToFilename ? "("+(useDoublePercent ? "%" : "")+"%(id)s)" : "") + ".%"+(useDoublePercent ? "%" : "")+"(ext)s"+"\" "+"https://youtube.com/watch?v="+s);
+                    //System.out.println("youtube-dl.exe"+(getThumbnail ?  " --write-thumbnail" : "")+(getDesc ?  " --write-description" : "")+(getInfoJSON ?  " --write-info-json" : "")+" --skip-download -w"+(useArchiveFile ? " --download-archive \"" + archiveFile + "\"" : "")+" -o \""+(preserveAsianTitles ? "%"+(useDoublePercent ? "%" : "")+"(title)s" : getWindowsSafeTitle("https://youtube.com/watch?v="+s))+ (addIDToFilename ? "("+(useDoublePercent ? "%" : "")+"%(id)s)" : "") + ".%"+(useDoublePercent ? "%" : "")+"(ext)s"+"\" "+"https://youtube.com/watch?v="+s);
+                    System.out.println("yt-dlp"+(getThumbnail ?  " --write-thumbnail" : "")+(getDesc ?  " --write-description" : "")+(getInfoJSON ?  " --write-info-json" : "")+(getComments ?  " --get-comments" : "")+" --skip-download -w"+(useArchiveFile ? " --download-archive \"" + archiveFile + "\"" : "")+" -o \""+(preserveAsianTitles ? "%"+(useDoublePercent ? "%" : "")+"(title)s" : getWindowsSafeTitle("https://youtube.com/watch?v="+s, useDoublePercent))+ (addIDToFilename ? "("+(useDoublePercent ? "%" : "")+"%(id)s)" : "") + ".%"+(useDoublePercent ? "%" : "")+"(ext)s"+"\" "+"https://youtube.com/watch?v="+s);
                 } else if (getVideos && !getMetadata) {
                     //Just get the videos
-                    System.out.println("youtube-dl.exe -f " + getBestVideoAndAudioFormat("https://youtube.com/watch?v="+s, maxHRes, reject60fps, rejectAV1) + " -w"+(useArchiveFile ? " --download-archive \"" + archiveFile + "\"" : "")+" -o \""+(preserveAsianTitles ? "%"+(useDoublePercent ? "%" : "")+"(title)s" : getWindowsSafeTitle("https://youtube.com/watch?v="+s))+ (addIDToFilename ? "("+(useDoublePercent ? "%" : "")+"%(id)s)" : "") + ".%"+(useDoublePercent ? "%" : "")+"(ext)s"+"\" "+"https://youtube.com/watch?v="+s);
+                    //System.out.println("youtube-dl.exe -f " + getBestVideoAndAudioFormat("https://youtube.com/watch?v="+s, maxHRes, reject60fps, rejectAV1) + " -w"+(useArchiveFile ? " --download-archive \"" + archiveFile + "\"" : "")+" -o \""+(preserveAsianTitles ? "%"+(useDoublePercent ? "%" : "")+"(title)s" : getWindowsSafeTitle("https://youtube.com/watch?v="+s))+ (addIDToFilename ? "("+(useDoublePercent ? "%" : "")+"%(id)s)" : "") + ".%"+(useDoublePercent ? "%" : "")+"(ext)s"+"\" "+"https://youtube.com/watch?v="+s);
+                    System.out.println("yt-dlp -f " + getBestVideoAndAudioFormat("https://youtube.com/watch?v="+s, maxHRes, reject60fps, rejectAV1) + " -w"+(useArchiveFile ? " --download-archive \"" + archiveFile + "\"" : "")+" -o \""+(preserveAsianTitles ? "%"+(useDoublePercent ? "%" : "")+"(title)s" : getWindowsSafeTitle("https://youtube.com/watch?v="+s, useDoublePercent))+ (addIDToFilename ? "("+(useDoublePercent ? "%" : "")+"%(id)s)" : "") + ".%"+(useDoublePercent ? "%" : "")+"(ext)s"+"\" "+"https://youtube.com/watch?v="+s);
                 } else if (getVideos && getMetadata) {
                     //Get the videos and metadata
-                    System.out.println("youtube-dl.exe"+(getThumbnail ?  " --write-thumbnail" : "")+(getDesc ?  " --write-description" : "")+(getInfoJSON ?  " --write-info-json" : "")+" -f " + getBestVideoAndAudioFormat("https://youtube.com/watch?v="+s, maxHRes, reject60fps, rejectAV1) + " -w"+(useArchiveFile ? " --download-archive \"" + archiveFile + "\"" : "")+" -o \""+(preserveAsianTitles ? "%"+(useDoublePercent ? "%" : "")+"(title)s" : getWindowsSafeTitle("https://youtube.com/watch?v="+s))+ (addIDToFilename ? "("+(useDoublePercent ? "%" : "")+"%(id)s)" : "") + ".%"+(useDoublePercent ? "%" : "")+"(ext)s"+"\" "+"https://youtube.com/watch?v="+s);
+                    //System.out.println("youtube-dl.exe"+(getThumbnail ?  " --write-thumbnail" : "")+(getDesc ?  " --write-description" : "")+(getInfoJSON ?  " --write-info-json" : "")+" -f " + getBestVideoAndAudioFormat("https://youtube.com/watch?v="+s, maxHRes, reject60fps, rejectAV1) + " -w"+(useArchiveFile ? " --download-archive \"" + archiveFile + "\"" : "")+" -o \""+(preserveAsianTitles ? "%"+(useDoublePercent ? "%" : "")+"(title)s" : getWindowsSafeTitle("https://youtube.com/watch?v="+s))+ (addIDToFilename ? "("+(useDoublePercent ? "%" : "")+"%(id)s)" : "") + ".%"+(useDoublePercent ? "%" : "")+"(ext)s"+"\" "+"https://youtube.com/watch?v="+s);
+                    System.out.println("yt-dlp"+(getThumbnail ?  " --write-thumbnail" : "")+(getDesc ?  " --write-description" : "")+(getInfoJSON ?  " --write-info-json" : "")+(getComments ?  " --get-comments" : "")+" -f " + getBestVideoAndAudioFormat("https://youtube.com/watch?v="+s, maxHRes, reject60fps, rejectAV1) + " -w"+(useArchiveFile ? " --download-archive \"" + archiveFile + "\"" : "")+" -o \""+(preserveAsianTitles ? "%"+(useDoublePercent ? "%" : "")+"(title)s" : getWindowsSafeTitle("https://youtube.com/watch?v="+s, useDoublePercent))+ (addIDToFilename ? "("+(useDoublePercent ? "%" : "")+"%(id)s)" : "") + ".%"+(useDoublePercent ? "%" : "")+"(ext)s"+"\" "+"https://youtube.com/watch?v="+s);
                 }
                 
-                if (getComments) {
+                /*if (getComments) {
                     if (waitToPrintCommentCommands) {
                         commentCommands.add("call youtube-comment-scraper -f json -s -o \""+getWindowsSafeTitle("https://youtube.com/watch?v="+s)+(addIDToFilename ? "(" + s + ")" : "")+".json\" -- " + s);
                     } else {
                         System.out.println("call youtube-comment-scraper -f json -s -o \""+getWindowsSafeTitle("https://youtube.com/watch?v="+s)+(addIDToFilename ? "(" + s + ")" : "")+".json\" -- " + s);
                     }
-                }
+                }*/
                 count++;
             }
         }
         //Wait for youtube-dl to end
         while (p.isAlive()) {}
         
-        if (getComments && waitToPrintCommentCommands) {
+        /*if (getComments && waitToPrintCommentCommands) {
             System.out.println();
             for (String c : commentCommands) {
                 System.out.println(c);
             }
-        }
+        }*/
         
         recommendedFormatLabel.setText("Done");
     }
     
-    private static String getWindowsSafeTitle(String url) throws Exception {
+    private static String getWindowsSafeTitle(String url, boolean useDoublePercent) throws Exception {
         Runtime rt = Runtime.getRuntime();
-        String[] cmd = {"youtube-dl.exe","-e"/*,"--proxy","\"http://149.56.106.104:3128\""*/,url};
+        String[] cmd = {"yt-dlp.exe","-e"/*,"--proxy","\"http://149.56.106.104:3128\""*/,url};
         Process p = rt.exec(cmd);
         
         BufferedReader stdin = new BufferedReader(new InputStreamReader(p.getInputStream()));
@@ -173,8 +177,8 @@ public class FXMLDocumentController implements Initializable {
         //Wait for youtube-dl to end
         while (p.isAlive()) {}
         
-        //If s is empty, return "no_title"
-        if (s == null) return "no_title";
+        //If s is empty, just use the title template string
+        if (s == null) return "%"+(useDoublePercent ? "%" : "")+"(title)s";
         
         //Regex found at https://stackoverflow.com/questions/31563951/removing-invalid-characters-from-a-string-to-use-it-as-a-file
         String outStr = "";
@@ -198,62 +202,61 @@ public class FXMLDocumentController implements Initializable {
         
     private static String getBestVideoAndAudioFormat(String url, int maxHRes, boolean reject60fps, boolean rejectAV1) throws Exception {
         Runtime rt = Runtime.getRuntime();
-        String[] cmd = {"youtube-dl.exe","-F",url};
+        ArrayList<String> cmdArrayList = new ArrayList<String>();
+        cmdArrayList.add("yt-dlp.exe");
+        cmdArrayList.add("--format-sort-force");
+        cmdArrayList.add("--format-sort");
+        cmdArrayList.add("\"" + (maxHRes > 0 ? "res:" + maxHRes + "," : "") + "hasvid,res,+filesize,\"");
+        cmdArrayList.add("-F");
+        cmdArrayList.add(url);
+        String[] cmd = cmdArrayList.toArray(new String[6]);
         Process p = rt.exec(cmd);
         
         BufferedReader stdin = new BufferedReader(new InputStreamReader(p.getInputStream()));
-        Vector<String> formatList = new Vector<>();
+        ArrayList<String> formatList = new ArrayList<>();
         String s;
-        boolean add2List = false;
+        boolean shouldAddLine = false;
         while ((s = stdin.readLine()) != null){
-            if (add2List) {
+            if (shouldAddLine && !s.trim().isEmpty()) {
                 formatList.add(s);
             }
-            if (s.substring(0, 6).equals("format")) add2List = true;
+            if (!s.isEmpty() && s.charAt(0) == '-') {
+                shouldAddLine = true;
+            }
         }
         //Wait for youtube-dl to end
         while (p.isAlive()) {}
         String bestFmt = getBestFormat(formatList, maxHRes, reject60fps, rejectAV1);
         String bestFmtNum = bestFmt.split(" ", 2)[0];
         if (bestFmt.length() < 18) System.out.println("Bad format line: "+bestFmt);
-        String bestAudioFmt = (bestFmt.length() > 17 ? (bestFmt.substring(13, 17).trim().equals("webm") ? "251" : "140") : "error");
+        String bestAudioFmt = (bestFmt.contains("avc1") ? "ba[ext=m4a]" : "ba[ext=webm]");
         return bestFmtNum+"+"+bestAudioFmt;
     }
     
-    private static String getBestFormat(Vector<String> list, boolean reject60fps, boolean rejectAV1) throws Exception {
+    private static String getBestFormat(ArrayList<String> list, boolean reject60fps, boolean rejectAV1) throws Exception {
         return getBestFormat(list, 0, reject60fps, rejectAV1);
     }
     
-    private static String getBestFormat(Vector<String> list) throws Exception {
+    private static String getBestFormat(ArrayList<String> list) throws Exception {
         return getBestFormat(list, 0, false, false);
     }
     
-    private static String getBestFormat(Vector<String> list, int maxHRes, boolean reject60fps, boolean rejectAV1) throws Exception {
+    private static String getBestFormat(ArrayList<String> list, int maxHRes, boolean reject60fps, boolean rejectAV1) throws Exception {
         if (list.isEmpty()) return "";
         String bestFmt = list.get(0);
         String currentFmt;
         
-        //Select the first video format
+        //Select the last video format
         int startIdx = 0;
-        for (int i = 0; i < list.size(); i++){  
+        for (int i = list.size() - 1; i > 4; i--) {
             currentFmt = list.get(i);
-            if ((!currentFmt.substring(24, 29).equals("audio"))) {
-                startIdx = i + i;
-                break;
-            }
+            int framerate = Integer.parseInt(currentFmt.substring(22, 24).trim());
+            if (reject60fps && framerate == 60) continue;
+            if (rejectAV1 && currentFmt.contains("av01")) continue;
+            return currentFmt;
         }
         
-        for (int i = startIdx; i < list.size(); i++){
-            currentFmt = list.get(i);
-            if (currentFmt.length() == 0) break;
-            
-            //Skip audio formats and formats below 100
-            if ((!currentFmt.substring(24, 29).equals("audio")) && (Integer.parseInt(currentFmt.split(" ",2)[0].replaceAll("[\\D]", "")) > 99)) {
-                boolean currentFmtIsBetter = (compareVideoFmt(currentFmt, bestFmt, maxHRes, reject60fps, rejectAV1) == 1);
-                if (currentFmtIsBetter) bestFmt = currentFmt;
-            }
-        }
-        return bestFmt;
+        return "";
     }
     
     private static int compareVideoFmt(String f1, String f2, int maxHRes, boolean reject60fps, boolean rejectAV1) throws Exception {

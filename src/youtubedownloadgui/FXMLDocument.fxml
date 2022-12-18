@@ -30,12 +30,12 @@
       <CheckBox fx:id="reject60fpsCB" layoutX="156.0" layoutY="242.0" mnemonicParsing="false" selected="true" text="Reject 60 fps" />
       <CheckBox fx:id="rejectAV1CB" layoutX="156.0" layoutY="270.0" mnemonicParsing="false" selected="true" text="Reject AV1" />
       <CheckBox fx:id="forceMP4CB" layoutX="299.0" layoutY="242.0" mnemonicParsing="false" text="Force MP4" />
-      <CheckBox fx:id="preserveAsianCharsCB" layoutX="299.0" layoutY="270.0" mnemonicParsing="false" text="Preserve Asian titles" />
+      <CheckBox fx:id="preserveAsianCharsCB" layoutX="299.0" layoutY="270.0" mnemonicParsing="false" selected="true" text="Preserve Asian titles" />
       <CheckBox fx:id="getVideosCB" layoutX="11.0" layoutY="167.0" mnemonicParsing="false" selected="true" text="Videos" />
       <CheckBox fx:id="getMetadataCB" layoutX="80.0" layoutY="167.0" mnemonicParsing="false" selected="true" text="Metadata" />
       <CheckBox fx:id="getCommentsCB" layoutX="161.0" layoutY="167.0" mnemonicParsing="false" text="Comments (requires youtube-comment-scraper)" />
       <CheckBox fx:id="useDoublePercentCB" layoutX="11.0" layoutY="298.0" mnemonicParsing="false" selected="true" text="Use double % (for Windows batch file output)" />
-      <CheckBox fx:id="addIDToFilenameCB" layoutX="299.0" layoutY="298.0" mnemonicParsing="false" text="Add ID to filename" />
+      <CheckBox fx:id="addIDToFilenameCB" layoutX="299.0" layoutY="298.0" mnemonicParsing="false" selected="true" text="Add ID to filename" />
       <Spinner fx:id="limitSpinner" layoutX="133.0" layoutY="82.0" prefHeight="25.0" prefWidth="79.0" />
       <Label layoutX="11.0" layoutY="86.0" text="Limit (0 is unlimited)" />
       <CheckBox fx:id="useArchiveFileCB" layoutX="11.0" layoutY="326.0" mnemonicParsing="false" selected="true" text="Use archive file" />

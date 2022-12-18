@@ -7,7 +7,7 @@ A YouTube scraping assistant that chooses the best format for each video on an i
 
 Make sure youtube-dl is somewhere in your PATH.
 
-If you want to scrape comments, you'll need youtube-comment-scraper-cli. This program generates commands rather than actually running the comment scraper so you can wait to install it.
+Since the program now uses yt-dlp instead of youtube-dl, you no longer need youtube-comment-scraper-cli to get the comments.
 
 I recommend running this in NetBeans so you can easily copy-paste the output from its console.
 
@@ -29,9 +29,8 @@ move *.json metadata
 move *.jpg thumbnails
 move *.webp thumbnails
 ```
-I prefer to put comments in their own folder so I end up with "thumbnails", "metadata", and "comments" folders.
 
-Once this is done, I usually compress the "metadata" and "comments" folders using 7-Zip with LZMA2 and then delete them. This cuts down on wasted space from having many small files on a 4K drive.
+Once this is done, I usually compress the "metadata" folder using 7-Zip with LZMA2 and then delete them. This cuts down on wasted space from having many small files on a 4K drive.
 
 #### Settings
 
@@ -55,7 +54,6 @@ Once this is done, I usually compress the "metadata" and "comments" folders usin
 
 - "Force MP4" doesn't do anything yet
 - The table at the bottom is not used at the moment. All output is sent to stdout (the command window)
-- Some channels and playlists don't work. This happens often with little-known channels. This program depends on reported file sizes and for some reason youtube-dl can't provide that for some videos. In this case it may recommend two audio formats instead of video and audio. As long as it doesn't say something like "-f 139+140" it should be fine. If it does, you'll have to decide on your own if you want MP4 or VP9 and edit the command to match your choice.
 - This program has trouble with certain playlists that contain private videos in the middle of the list.
 
 
